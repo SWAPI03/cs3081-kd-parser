@@ -1,0 +1,22 @@
+{
+  "shards": [
+    "shard-0.jsonl",
+    "shard-1.jsonl"
+  ],
+  "counts": {
+    "input": 3000,
+    "a_invalid_json": 1,
+    "b_wrong_keys": 0,
+    "c_bad_intent": 13,
+    "d_bad_slot": 116,
+    "duplicates": 50,
+    "kept": 2820
+  },
+  "coverage": {
+    "pool_ids": 3000,
+    "missing": 0,
+    "repeated": 0,
+    "unknown": 0
+  },
+  "sha256": "011ceb9fa3b7588f6fdce70c79e04ae369b86a48dc53d3847656ba34fedf0061"
+}

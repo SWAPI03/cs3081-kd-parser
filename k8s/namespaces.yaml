@@ -1,0 +1,18 @@
+# The three namespaces the brief asks for.
+#   data      object storage (SeaweedFS)
+#   pipeline  teacher-labelling workers
+#   app       the inference service
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: data
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pipeline
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app

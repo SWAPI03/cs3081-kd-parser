@@ -1,0 +1,28 @@
+# Local Kubernetes cluster for the project (Task 1).
+# Create it with:  k3d cluster create --config cluster/k3d.yaml
+#
+# One k3s server node: the whole "cloud" runs on one laptop, so there is no
+# multi-machine fault tolerance (stated as a limitation in the report).
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: kdcloud
+servers: 1
+agents: 0
+image: rancher/k3s:v1.31.4-k3s1
+ports:
+  # Traefik (the Ingress controller bundled with k3s) -> http://localhost:8080
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+  # SeaweedFS S3 API (NodePort 30333) -> http://localhost:8333, used by laptop-side scripts
+  - port: 8333:30333
+    nodeFilters:
+      - server:0
+options:
+  k3d:
+    wait: true
+    timeout: "300s"
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true

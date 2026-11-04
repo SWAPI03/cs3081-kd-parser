@@ -1,0 +1,93 @@
+# CI/CD (Task 6): lint -> unit tests -> model evaluation (model from the GitHub Release)
+# -> quality gate (score.py --min-validity 95), plus a secret scan.
+#
+# To show the gate failing on purpose: Actions -> ci -> Run workflow -> model = base
+# (the untrained Pythia-70M, which never produces valid JSON).
+name: ci
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Model to evaluate: student (Release asset) or base (untrained Pythia-70M)"
+        type: choice
+        options: [student, base]
+        default: student
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}"}
+      - run: pip install pyflakes==3.2.0
+      - run: python -m pyflakes worker training service scripts tests
+
+  test:
+    needs: lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}"}
+      - run: pip install torch==2.4.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r training/requirements.txt pytest==8.3.3
+      - run: python -m pytest -v tests
+
+  evaluate:
+    needs: test
+    runs-on: ubuntu-24.04
+    env:
+      MODEL_CHOICE: ${{ github.event.inputs.model || 'student' }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}"}
+      - run: pip install torch==2.4.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r training/requirements.txt
+      - name: Get the model
+        run: |
+          if [ "$MODEL_CHOICE" = base ]; then
+            echo "MODEL_PATH=EleutherAI/pythia-70m" >> "$GITHUB_ENV"
+          else
+            . scripts/release.conf
+            gh release download "$RELEASE_TAG" -R "${{ github.repository }}" -p model-v1.tar.gz
+            echo "$(cut -d' ' -f1 models/v1/model.sha256)  model-v1.tar.gz" | sha256sum -c -
+            mkdir -p ci-model && tar -xzf model-v1.tar.gz -C ci-model
+            echo "MODEL_PATH=ci-model" >> "$GITHUB_ENV"
+          fi
+      - name: Predict on validation.jsonl
+        run: python training/predict.py --model "$MODEL_PATH" --out ci-results/predictions.jsonl
+      - name: Score
+        run: python tools/score.py ci-results/predictions.jsonl data/validation.jsonl --out ci-results/score.json
+      - uses: actions/upload-artifact@v4
+        with: {name: evaluation, path: ci-results/}
+
+  quality-gate:
+    needs: evaluate
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: evaluation, path: ci-results/}
+      - name: JSON validity must be at least 95%
+        run: python tools/score.py ci-results/predictions.jsonl data/validation.jsonl --min-validity 95
+
+  secret-scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: gitleaks (must report nothing)
+        run: |
+          curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.21.2/gitleaks_8.21.2_linux_x64.tar.gz | tar -xz gitleaks
+          ./gitleaks detect --source . --redact --verbose --exit-code 1

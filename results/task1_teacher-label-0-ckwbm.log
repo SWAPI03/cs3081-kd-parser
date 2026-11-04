@@ -1,0 +1,31 @@
+[shard 0/2] 1500 commands, 725 already done; teacher at http://host.k3d.internal:11434; writing s3://datasets/teacher/shard-0.jsonl
+[teacher] request failed (<urlopen error [Errno 111] Connection refused>); retrying in 5s
+[teacher] request failed (HTTP Error 500: Internal Server Error); retrying in 10s
+[teacher] request failed (HTTP Error 500: Internal Server Error); retrying in 15s
+Traceback (most recent call last):
+  File "/app/worker/label.py", line 84, in <module>
+    main()
+  File "/app/worker/label.py", line 68, in main
+    raw = teacher.ask(url, teacher.build_prompt(template, cmd["text"]))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/worker/teacher.py", line 79, in ask
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 216, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 525, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 634, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 563, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 496, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/urllib/request.py", line 643, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 500: Internal Server Error

@@ -1,0 +1,33 @@
+# Training configuration for the student (Task 2). `make train` reads ONLY this file.
+student_model: EleutherAI/pythia-70m
+model_revision: main
+
+seed: 42
+learning_rate: 0.0002
+batch_size: 16
+epochs: 5
+max_seq_length: 128          # longest real example is far shorter; nothing is cut
+warmup_ratio: 0.05           # linear warm-up, then linear decay to 0
+weight_decay: 0.0
+max_grad_norm: 1.0
+train_records: 1500          # the brief: the first 1,500 records of the cleaned dataset
+
+data:
+  bucket: datasets
+  key: v1/train.jsonl
+  checksum_key: v1/train.sha256
+
+# Settings that differ for each model version. Everything not listed is shared.
+versions:
+  v1: {seed: 42}
+  v2: {seed: 7}              # same recipe, different seed (required for Task 4)
+
+# Library versions used (also pinned in training/requirements.txt and service/requirements.txt).
+library_versions:
+  python: "3.11"
+  torch: "2.4.1+cpu"
+  transformers: "4.44.2"
+  tokenizers: "0.19.1"
+  safetensors: "0.4.5"
+  boto3: "1.35.76"
+  pyyaml: "6.0.2"

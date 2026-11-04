@@ -1,0 +1,20 @@
+# Autoscaling (Task 4, step 4): 1 to 2 replicas, target 70% CPU.
+# Utilisation is measured against the CPU request (500m), so scale-up starts above ~350m per Pod.
+# metrics-server (bundled with k3s) supplies the CPU numbers.
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: parser
+  namespace: app
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: parser}
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: {type: Utilization, averageUtilization: 70}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60   # default is 300 s; shorter so scale-down is visible in a test

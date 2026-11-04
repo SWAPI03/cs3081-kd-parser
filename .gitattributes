@@ -1,0 +1,5 @@
+# Keep bytes identical on every OS so checksums always match.
+*.jsonl -text
+*.sha256 -text
+*.sh text eol=lf
+Makefile text eol=lf

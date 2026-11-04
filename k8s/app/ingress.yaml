@@ -1,0 +1,16 @@
+# Traefik (bundled with k3s) sends /parse to the Service. Reachable at http://localhost:8080/parse.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: parser
+  namespace: app
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /parse
+            pathType: Exact
+            backend:
+              service:
+                name: parser
+                port: {number: 80}

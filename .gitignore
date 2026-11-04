@@ -1,0 +1,23 @@
+# secrets: never committed
+.env
+# local environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# model weights: object storage + GitHub Release only, never Git.
+# Only the checksum files models/<version>/model.sha256 are committed.
+models/*
+!models/v1/
+!models/v2/
+models/v1/*
+models/v2/*
+!models/v1/model.sha256
+!models/v2/model.sha256
+*.safetensors
+*.bin
+*.tar.gz
+# scratch
+results/pilot/
+ci-model/
+ci-results/

@@ -1,0 +1,3 @@
+NAME                    READY   STATUS    RESTARTS   AGE   IP           NODE                   NOMINATED NODE   READINESS GATES
+teacher-label-0-zwkxf   1/1     Running   0          10s   10.42.0.11   k3d-kdcloud-server-0   <none>           <none>
+teacher-label-1-bp5lz   1/1     Running   0          10s   10.42.0.12   k3d-kdcloud-server-0   <none>           <none>

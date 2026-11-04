@@ -1,0 +1,40 @@
+# Two teacher-labelling workers running at the same time in namespace "pipeline" (Task 1, step 5).
+#
+# An Indexed Job with completions=2 and parallelism=2 starts two Pods together. Kubernetes gives
+# each Pod a different completion index (0 or 1), which we pass to the worker as SHARD_INDEX.
+# Each worker writes its own object: datasets/teacher/shard-0.jsonl and shard-1.jsonl.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: teacher-label
+  namespace: pipeline
+spec:
+  completionMode: Indexed
+  completions: 2
+  parallelism: 2
+  backoffLimit: 6                # a crashed worker restarts and resumes from its last checkpoint
+  template:
+    metadata:
+      labels: {app: teacher-label}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: worker
+          image: kd-worker:v1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SHARD_INDEX
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.annotations['batch.kubernetes.io/job-completion-index']
+            - {name: SHARD_COUNT, value: "2"}
+            # Ollama runs on the laptop; k3d makes the laptop reachable as host.k3d.internal.
+            - {name: OLLAMA_URL, value: "http://host.k3d.internal:11434"}
+            - {name: S3_ENDPOINT, value: "http://seaweedfs.data.svc.cluster.local:8333"}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom: {secretKeyRef: {name: s3-credentials, key: AWS_ACCESS_KEY_ID}}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom: {secretKeyRef: {name: s3-credentials, key: AWS_SECRET_ACCESS_KEY}}
+          resources:
+            requests: {cpu: "50m", memory: "96Mi"}
+            limits: {cpu: "500m", memory: "256Mi"}

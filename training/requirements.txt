@@ -1,0 +1,11 @@
+# Training and evaluation on the laptop CPU. Install torch from the CPU index first:
+#   pip install torch==2.4.1+cpu --index-url https://download.pytorch.org/whl/cpu
+transformers==4.44.2
+tokenizers==0.19.1
+safetensors==0.4.5
+numpy==1.26.4
+pyyaml==6.0.2
+boto3==1.35.76
+fastapi==0.115.4
+uvicorn==0.32.0
+httpx==0.27.2

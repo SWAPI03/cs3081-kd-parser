@@ -1,0 +1,18 @@
+# kubectl -n pipeline get job,pods -o wide
+NAME                      STATUS     COMPLETIONS   DURATION   AGE   CONTAINERS   IMAGES         SELECTOR
+job.batch/teacher-label   Complete   2/2           26m        26m   worker       kd-worker:v1   batch.kubernetes.io/controller-uid=65469c99-b159-4bf6-bc58-de8118956892
+
+NAME                        READY   STATUS      RESTARTS   AGE   IP           NODE                   NOMINATED NODE   READINESS GATES
+pod/teacher-label-0-bh8jl   0/1     Completed   0          12m   10.42.0.15   k3d-kdcloud-server-0   <none>           <none>
+pod/teacher-label-0-ckwbm   0/1     Error       0          13m   10.42.0.13   k3d-kdcloud-server-0   <none>           <none>
+pod/teacher-label-0-zwkxf   0/1     Error       0          26m   10.42.0.11   k3d-kdcloud-server-0   <none>           <none>
+pod/teacher-label-1-bp5lz   0/1     Error       0          26m   10.42.0.12   k3d-kdcloud-server-0   <none>           <none>
+pod/teacher-label-1-smw5b   0/1     Completed   0          13m   10.42.0.14   k3d-kdcloud-server-0   <none>           <none>
+
+# SHARD_INDEX of each Pod (from the Indexed Job annotation)
+POD                     SHARD_INDEX   STATUS
+teacher-label-0-bh8jl   0             Succeeded
+teacher-label-0-ckwbm   0             Failed
+teacher-label-0-zwkxf   0             Failed
+teacher-label-1-bp5lz   1             Failed
+teacher-label-1-smw5b   1             Succeeded

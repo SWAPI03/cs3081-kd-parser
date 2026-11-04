@@ -1,0 +1,60 @@
+# The inference service in namespace "app" (Task 4).
+#
+# Rolling update to v2 (Task 4, step 5) and rollback:
+#   kubectl -n app set env deployment/parser MODEL_VERSION=v2 MODEL_URI=s3://models/v2
+#   kubectl -n app rollout undo deployment/parser
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: parser
+  namespace: app
+  labels: {app: parser}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: parser}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1          # start one new Pod first...
+      maxUnavailable: 0    # ...and never drop below two serving Pods
+  template:
+    metadata:
+      labels: {app: parser}
+    spec:
+      terminationGracePeriodSeconds: 40
+      containers:
+        - name: parser
+          image: kd-parser:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - {name: http, containerPort: 8000}
+          env:
+            - {name: MODEL_URI, value: "s3://models/v1"}
+            - {name: MODEL_VERSION, value: "v1"}
+            - {name: S3_ENDPOINT, value: "http://seaweedfs.data.svc.cluster.local:8333"}
+            - {name: MAX_NEW_TOKENS, value: "64"}
+            - {name: FAULT_INJECT, value: "0"}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom: {secretKeyRef: {name: s3-credentials, key: AWS_ACCESS_KEY_ID}}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom: {secretKeyRef: {name: s3-credentials, key: AWS_SECRET_ACCESS_KEY}}
+          resources:
+            requests: {cpu: "500m", memory: "512Mi"}
+            limits: {cpu: "1", memory: "1Gi"}
+          # Ready only after the model is downloaded and loaded (/readyz turns 200).
+          readinessProbe:
+            httpGet: {path: /readyz, port: 8000}
+            periodSeconds: 2
+            failureThreshold: 1
+          # Restart only if the process itself hangs.
+          livenessProbe:
+            httpGet: {path: /healthz, port: 8000}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          # On shutdown, keep serving for 10 s while the Ingress stops sending traffic here,
+          # then uvicorn finishes the requests in flight. This keeps rollouts free of errors.
+          lifecycle:
+            preStop:
+              exec: {command: ["sleep", "10"]}
