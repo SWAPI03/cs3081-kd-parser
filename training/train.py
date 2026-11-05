@@ -187,12 +187,17 @@ def main():
         f.write(f"{digest}  model-{a.version}.tar.gz\n")
     print(f"[train] {tar_path} sha256 {digest}")
 
+    upload_model(a.version, out_dir)
+
+
+def upload_model(version, out_dir):
+    """Copy every file of the model folder to s3://models/<version>/ (multipart for big files)."""
     import s3util
     s3 = s3util.client()
+    s3util.ensure_bucket(s3, "models")
     for fname in sorted(os.listdir(out_dir)):
-        with open(os.path.join(out_dir, fname), "rb") as f:
-            s3util.put_bytes(s3, "models", f"{a.version}/{fname}", f.read())
-        print(f"[train] uploaded s3://models/{a.version}/{fname}")
+        s3util.upload_file(s3, os.path.join(out_dir, fname), "models", f"{version}/{fname}")
+        print(f"[train] uploaded s3://models/{version}/{fname}")
 
 
 if __name__ == "__main__":

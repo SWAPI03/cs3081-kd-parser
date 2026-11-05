@@ -8,10 +8,16 @@ Credentials: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (from .env or a Kuberne
 import os
 
 import boto3
+from boto3.s3.transfer import TransferConfig
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
 DEFAULT_ENDPOINT = "http://localhost:8333"
+
+# Large files (the 280 MB model weights) are sent as a multipart upload in 8 MB parts.
+# One huge PUT would make SeaweedFS hold the whole file in memory and can exceed its limit.
+TRANSFER = TransferConfig(multipart_threshold=8 * 1024 * 1024, multipart_chunksize=8 * 1024 * 1024,
+                          max_concurrency=4)
 
 
 def load_dotenv(path=".env"):
@@ -55,7 +61,16 @@ def get_bytes(s3, bucket, key):
 
 
 def put_bytes(s3, bucket, key, data):
+    """Small objects only (JSONL files, checksums). Use upload_file for model weights."""
     s3.put_object(Bucket=bucket, Key=key, Body=data)
+
+
+def upload_file(s3, path, bucket, key):
+    s3.upload_file(path, bucket, key, Config=TRANSFER)
+
+
+def upload_fileobj(s3, fileobj, bucket, key):
+    s3.upload_fileobj(fileobj, bucket, key, Config=TRANSFER)
 
 
 def list_keys(s3, bucket, prefix):

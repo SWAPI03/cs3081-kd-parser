@@ -9,7 +9,7 @@ PY := .venv/bin/python
 SUBSET ?=
 N ?= 20
 
-.PHONY: help venv up down pilot label label-local clean-data train train-v2 eval eval-teacher \
+.PHONY: help venv up down pilot label label-local clean-data train train-v2 upload-model eval eval-teacher \
         release image memtest deploy test lint load rollout recovery coldstart hpa balance cost network
 
 help:
@@ -43,6 +43,9 @@ train: ## fine-tune Pythia-70M (v1); `make train SUBSET=50` for a quick check
 
 train-v2: ## second model version for Task 4 (different seed)
 	bash scripts/train.sh v2
+
+upload-model: venv ## re-upload a trained model without retraining: make upload-model V=v1
+	$(PY) scripts/upload_model.py $(V)
 
 eval: ## score untrained Pythia-70M, student v1 and v2 on validation.jsonl
 	bash scripts/evaluate.sh

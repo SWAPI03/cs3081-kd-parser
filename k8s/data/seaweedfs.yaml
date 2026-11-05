@@ -54,7 +54,7 @@ spec:
             periodSeconds: 5
           resources:
             requests: {cpu: "100m", memory: "128Mi"}
-            limits: {cpu: "1", memory: "512Mi"}
+            limits: {cpu: "1", memory: "1Gi"}
           volumeMounts:
             - {name: data, mountPath: /data}
             - {name: s3-config, mountPath: /etc/seaweedfs, readOnly: true}

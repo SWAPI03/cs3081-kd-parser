@@ -47,7 +47,7 @@ def main():
             sys.exit(f"checksum mismatch for {url}: {digest} != {expected}")
         with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
             for member in tar.getmembers():
-                s3util.put_bytes(s3, "models", f"{version}/{member.name}", tar.extractfile(member).read())
+                s3util.upload_fileobj(s3, tar.extractfile(member), "models", f"{version}/{member.name}")
         s3util.put_bytes(s3, "models", f"{version}/model.sha256", open(sha_file, "rb").read())
         print(f"s3://models/{version}/ seeded from the Release (sha256 verified)")
         have[version] = True
