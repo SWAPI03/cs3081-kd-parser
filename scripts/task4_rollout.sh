@@ -15,12 +15,14 @@ log "BEFORE:"; probe | grep -iE 'HTTP/|x-model-version|x-served-by'
 log "rolling update to v2"
 kubectl -n app set env deployment/parser MODEL_VERSION=v2 MODEL_URI=s3://models/v2
 kubectl -n app rollout status deployment/parser --timeout=300s
-log "AFTER UPDATE:"; probe | grep -iE 'HTTP/|x-model-version|x-served-by'
+wait_for_ready 2   # old Pods finish their 10 s preStop pause and disappear
+log "AFTER UPDATE (4 requests):"; for _ in 1 2 3 4; do probe | grep -iE 'x-model-version|x-served-by' | tr '\r\n' '  '; echo; done
 sleep 40
 log "rolling back with kubectl rollout undo"
 kubectl -n app rollout undo deployment/parser
 kubectl -n app rollout status deployment/parser --timeout=300s
-log "AFTER ROLLBACK:"; probe | grep -iE 'HTTP/|x-model-version|x-served-by'
+wait_for_ready 2
+log "AFTER ROLLBACK (4 requests):"; for _ in 1 2 3 4; do probe | grep -iE 'x-model-version|x-served-by' | tr '\r\n' '  '; echo; done
 kubectl -n app rollout history deployment/parser
 log "waiting for the load test to finish"
 wait "$LOAD_PID" || true
