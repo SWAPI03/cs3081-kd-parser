@@ -1,0 +1,12 @@
+title:	Student models
+tag:	models
+draft:	false
+prerelease:	false
+author:	SWAPI03
+created:	2026-11-05T16:42:44Z
+published:	2026-11-05T16:58:15Z
+url:	https://github.com/SWAPI03/cs3081-kd-parser/releases/tag/models
+asset:	model-v1.tar.gz
+asset:	model-v2.tar.gz
+--
+Pythia-70M students. sha256: v1 7269c59f716129b70b753c22d93da9fec572eafc2602af5bceb2f1694fd2675b, v2 ca76279bd462f2238b3605da6316ce1ab8181d1c09eae76c5f08be792ea76042
