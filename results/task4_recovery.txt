@@ -1,0 +1,17 @@
+[17:06:27] starting load (3 min)
+[17:07:07] BEFORE:
+NAME                      READY   STATUS    RESTARTS   AGE     IP           NODE                   NOMINATED NODE   READINESS GATES
+parser-5bbb7cd85d-884lk   1/1     Running   0          4m17s   10.42.0.33   k3d-kdcloud-server-0   <none>           <none>
+parser-5bbb7cd85d-hvs6k   1/1     Running   0          4m8s    10.42.0.34   k3d-kdcloud-server-0   <none>           <none>
+[17:07:07] deleting parser-5bbb7cd85d-884lk
+pod "parser-5bbb7cd85d-884lk" deleted
+[17:07:20] 2 replicas Ready again after 13 s
+[17:07:20] AFTER:
+NAME                      READY   STATUS    RESTARTS   AGE     IP           NODE                   NOMINATED NODE   READINESS GATES
+parser-5bbb7cd85d-hvs6k   1/1     Running   0          4m21s   10.42.0.34   k3d-kdcloud-server-0   <none>           <none>
+parser-5bbb7cd85d-mc4vf   1/1     Running   0          13s     10.42.0.35   k3d-kdcloud-server-0   <none>           <none>
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+parser   2/2     2            2           7m50s
+
+# Locust result for the whole window
+requests=1021 failures=0 failure_rate=0.00% p50=690ms p95=1100ms rps=5.69

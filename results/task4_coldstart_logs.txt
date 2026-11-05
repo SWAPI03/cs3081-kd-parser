@@ -1,0 +1,78 @@
+===== run 1 parser-5bbb7cd85d-c45jg
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+[16:59:55] starting: pod=parser-5bbb7cd85d-c45jg MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[16:59:55] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:55] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:55] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:51732 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+INFO:     10.42.0.1:51748 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[16:59:59] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:59] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+===== run 1 parser-5bbb7cd85d-qjjgl
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+[16:59:55] starting: pod=parser-5bbb7cd85d-qjjgl MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[16:59:55] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:55] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:55] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:56508 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[16:59:58] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:58] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[16:59:58] downloading s3://models/v1/tokenizer.json (2.1 MB) from http://seaweedfs.data.svc.cluster.local:8333
+===== run 2 parser-5bbb7cd85d-8qjm2
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+[17:00:11] starting: pod=parser-5bbb7cd85d-8qjm2 MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[17:00:12] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:12] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:12] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:49946 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+INFO:     10.42.0.1:49952 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[17:00:16] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:16] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+===== run 2 parser-5bbb7cd85d-vnpcn
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+[17:00:11] starting: pod=parser-5bbb7cd85d-vnpcn MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[17:00:11] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:11] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:11] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:36888 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+INFO:     10.42.0.1:36894 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[17:00:15] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:15] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+===== run 3 parser-5bbb7cd85d-gc6j5
+[17:00:27] starting: pod=parser-5bbb7cd85d-gc6j5 MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[17:00:27] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:27] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:27] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:58384 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[17:00:31] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:31] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:31] downloading s3://models/v1/tokenizer.json (2.1 MB) from http://seaweedfs.data.svc.cluster.local:8333
+===== run 3 parser-5bbb7cd85d-lmmmq
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+[17:00:27] starting: pod=parser-5bbb7cd85d-lmmmq MODEL_URI=s3://models/v1 MODEL_VERSION=v1 MAX_NEW_TOKENS=64 FAULT_INJECT=0
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+[17:00:27] downloading s3://models/v1/config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:27] downloading s3://models/v1/generation_config.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:27] downloading s3://models/v1/model.safetensors (281.7 MB) from http://seaweedfs.data.svc.cluster.local:8333
+INFO:     10.42.0.1:45070 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[17:00:31] downloading s3://models/v1/model.sha256 (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:31] downloading s3://models/v1/special_tokens_map.json (0.0 MB) from http://seaweedfs.data.svc.cluster.local:8333
+[17:00:31] downloading s3://models/v1/tokenizer.json (2.1 MB) from http://seaweedfs.data.svc.cluster.local:8333

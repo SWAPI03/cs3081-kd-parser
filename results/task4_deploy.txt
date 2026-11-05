@@ -1,0 +1,27 @@
+# kubectl -n app get deploy,svc,ingress,hpa,pods -o wide
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES         SELECTOR
+deployment.apps/parser   2/2     2            2           18s   parser       kd-parser:v1   app=parser
+
+NAME             TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+service/parser   ClusterIP   10.43.5.235   <none>        80/TCP    18s   app=parser
+
+NAME                               CLASS     HOSTS   ADDRESS      PORTS   AGE
+ingress.networking.k8s.io/parser   traefik   *       172.18.0.2   80      18s
+
+NAME                                         REFERENCE           TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/parser   Deployment/parser   cpu: <unknown>/70%   1         2         2          18s
+
+NAME                          READY   STATUS    RESTARTS   AGE   IP           NODE                   NOMINATED NODE   READINESS GATES
+pod/parser-5bbb7cd85d-fcd8q   1/1     Running   0          18s   10.42.0.23   k3d-kdcloud-server-0   <none>           <none>
+pod/parser-5bbb7cd85d-xdkfv   1/1     Running   0          18s   10.42.0.24   k3d-kdcloud-server-0   <none>           <none>
+
+# POST /parse through the Ingress
+HTTP/1.1 200 OK
+Content-Length: 73
+Content-Type: application/json
+Date: Thu, 05 Nov 2026 16:59:47 GMT
+Server: uvicorn
+X-Model-Version: v1
+X-Served-By: parser-5bbb7cd85d-xdkfv
+
+{"intent":"weather_query","date":"tomorrow","time":null,"place":"london"}

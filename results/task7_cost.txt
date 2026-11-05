@@ -1,0 +1,5 @@
+rate card: 3.5 INR/vCPU-hour, 0.45 INR/GiB-hour
+1. one replica   = 1 vCPU x 3.5 + 1 GiB x 0.45 = 3.9500 INR/hour
+2. 2 replicas      = 2 x 3.9500 = 7.9000 INR/hour
+3. throughput    = 5.7474 successful requests/s (load test) x 3600 = 20690.6 requests/hour
+4. cost / 1,000  = 7.9000 / 20690.6 x 1000 = 0.3818 INR

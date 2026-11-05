@@ -1,0 +1,38 @@
+[16:59:52] run 1: deleting all Pods
+pod "parser-5bbb7cd85d-fcd8q" deleted
+pod "parser-5bbb7cd85d-xdkfv" deleted
+# endpoints while the new Pods load the model (no ready addresses expected):
+parser-5bbb7cd85d-xdkfv ready=false
+parser-5bbb7cd85d-fcd8q ready=false
+parser-5bbb7cd85d-qjjgl ready=false
+parser-5bbb7cd85d-c45jg ready=false
+NAME     ENDPOINTS   AGE
+parser               27s
+run 1  parser-5bbb7cd85d-c45jg  created 2026-11-05T16:59:52Z  ready 2026-11-05T17:00:01Z  -> 9 s
+run 1  parser-5bbb7cd85d-qjjgl  created 2026-11-05T16:59:52Z  ready 2026-11-05T17:00:01Z  -> 9 s
+[17:00:08] run 2: deleting all Pods
+pod "parser-5bbb7cd85d-c45jg" deleted
+pod "parser-5bbb7cd85d-qjjgl" deleted
+# endpoints while the new Pods load the model (no ready addresses expected):
+parser-5bbb7cd85d-qjjgl ready=false
+parser-5bbb7cd85d-c45jg ready=false
+parser-5bbb7cd85d-8qjm2 ready=false
+parser-5bbb7cd85d-vnpcn ready=false
+NAME     ENDPOINTS   AGE
+parser               43s
+run 2  parser-5bbb7cd85d-8qjm2  created 2026-11-05T17:00:09Z  ready 2026-11-05T17:00:19Z  -> 10 s
+run 2  parser-5bbb7cd85d-vnpcn  created 2026-11-05T17:00:09Z  ready 2026-11-05T17:00:19Z  -> 10 s
+[17:00:24] run 3: deleting all Pods
+pod "parser-5bbb7cd85d-8qjm2" deleted
+pod "parser-5bbb7cd85d-vnpcn" deleted
+# endpoints while the new Pods load the model (no ready addresses expected):
+parser-5bbb7cd85d-8qjm2 ready=false
+parser-5bbb7cd85d-vnpcn ready=false
+parser-5bbb7cd85d-gc6j5 ready=false
+parser-5bbb7cd85d-lmmmq ready=false
+NAME     ENDPOINTS   AGE
+parser               59s
+run 3  parser-5bbb7cd85d-gc6j5  created 2026-11-05T17:00:24Z  ready 2026-11-05T17:00:33Z  -> 9 s
+run 3  parser-5bbb7cd85d-lmmmq  created 2026-11-05T17:00:24Z  ready 2026-11-05T17:00:33Z  -> 9 s
+
+creation -> Ready over 3 runs (6 Pods): 9 9 10 10 9 9 s; median 9 s

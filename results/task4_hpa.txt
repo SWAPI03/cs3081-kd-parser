@@ -1,0 +1,48 @@
+[17:09:31] waiting for the HPA to settle at 1 replica (idle)
+NAME     REFERENCE           TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+parser   Deployment/parser   cpu: 0%/70%   1         2         2          11m
+[17:10:49] starting load (4 min)
+17:10:49 load=on targets=0%/70% replicas=2
+17:10:59 load=on targets=0%/70% replicas=2
+17:11:10 load=on targets=77%/70% replicas=1
+17:11:20 load=on targets=77%/70% replicas=2
+17:11:30 load=on targets=77%/70% replicas=2
+17:11:40 load=on targets=199%/70% replicas=2
+17:11:50 load=on targets=198%/70% replicas=2
+17:12:01 load=on targets=198%/70% replicas=2
+17:12:11 load=on targets=199%/70% replicas=2
+17:12:21 load=on targets=198%/70% replicas=2
+17:12:31 load=on targets=198%/70% replicas=2
+17:12:41 load=on targets=197%/70% replicas=2
+17:12:51 load=on targets=197%/70% replicas=2
+17:13:02 load=on targets=197%/70% replicas=2
+17:13:12 load=on targets=197%/70% replicas=2
+17:13:22 load=on targets=196%/70% replicas=2
+17:13:32 load=on targets=196%/70% replicas=2
+17:13:42 load=on targets=197%/70% replicas=2
+17:13:52 load=on targets=196%/70% replicas=2
+17:14:03 load=on targets=196%/70% replicas=2
+17:14:13 load=on targets=196%/70% replicas=2
+17:14:23 load=on targets=197%/70% replicas=2
+17:14:33 load=on targets=196%/70% replicas=2
+17:14:43 load=on targets=196%/70% replicas=2
+17:14:53 load=off targets=196%/70% replicas=2
+17:15:04 load=off targets=161%/70% replicas=2
+17:15:14 load=off targets=161%/70% replicas=2
+17:15:24 load=off targets=16%/70% replicas=2
+17:15:34 load=off targets=0%/70% replicas=2
+17:15:44 load=off targets=0%/70% replicas=2
+17:15:54 load=off targets=0%/70% replicas=2
+17:16:05 load=off targets=0%/70% replicas=2
+17:16:15 load=off targets=0%/70% replicas=2
+17:16:25 load=off targets=0%/70% replicas=1
+
+Events:
+  Type     Reason                        Age                  From                       Message
+  ----     ------                        ----                 ----                       -------
+  Warning  FailedGetResourceMetric       15m (x4 over 16m)    horizontal-pod-autoscaler  failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API
+  Warning  FailedComputeMetricsReplicas  15m (x4 over 16m)    horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API
+  Warning  FailedGetResourceMetric       14m (x3 over 16m)    horizontal-pod-autoscaler  failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Warning  FailedComputeMetricsReplicas  14m (x3 over 16m)    horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Normal   SuccessfulRescale             5m23s                horizontal-pod-autoscaler  New size: 2; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             22s (x2 over 5m38s)  horizontal-pod-autoscaler  New size: 1; reason: All metrics below target

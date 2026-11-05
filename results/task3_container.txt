@@ -1,0 +1,42 @@
+# docker run --cpus=1 --memory=1g kd-parser:v1  (Thu Nov  5 16:58:36 UTC 2026)
+readyz right after start: 000down
+healthz: 200   readyz after load: 200
+
+# POST /parse
+HTTP/1.1 200 OK
+date: Thu, 05 Nov 2026 16:58:45 GMT
+server: uvicorn
+x-model-version: v1
+x-served-by: 69aff3949e7c
+content-length: 78
+content-type: application/json
+
+{"intent":"alarm_set","date":"tomorrow","time":"seven thirty am","place":null}
+
+# container log
+[16:58:44] downloading s3://models/v1/tokenizer.json (2.1 MB) from http://k3d-kdcloud-server-0:30333
+[16:58:44] downloading s3://models/v1/tokenizer_config.json (0.0 MB) from http://k3d-kdcloud-server-0:30333
+INFO:     172.18.0.1:52598 - "GET /readyz HTTP/1.1" 503 Service Unavailable
+[16:58:46] model v1 from s3://models/v1 loaded in 6.3s; ready
+INFO:     172.18.0.1:52608 - "GET /readyz HTTP/1.1" 200 OK
+INFO:     172.18.0.1:52614 - "GET /healthz HTTP/1.1" 200 OK
+INFO:     172.18.0.1:52628 - "GET /readyz HTTP/1.1" 200 OK
+INFO:     172.18.0.1:52642 - "POST /parse HTTP/1.1" 200 OK
+
+# 50 sequential requests at --cpus=1 --memory=1g
+HTTP 200: 50   other: 0   time: 17 s
+OOMKilled: false   still running: true
+peak memory (docker stats, sampled every 0.5 s): 386.6MiB of 1GiB
+CONTAINER ID   NAME      CPU %     MEM USAGE / LIMIT   MEM %     NET I/O         BLOCK I/O       PIDS
+69aff3949e7c   kd-test   0.17%     388MiB / 1GiB       37.89%    284MB / 276kB   423MB / 285MB   3
+
+# FAULT_INJECT=1
+HTTP/1.1 500 Internal Server Error
+date: Thu, 05 Nov 2026 16:59:11 GMT
+server: uvicorn
+x-model-version: v1
+x-served-by: 7fea8a63dfaa
+content-length: 32
+content-type: application/json
+
+{"error":"invalid_model_output"}
