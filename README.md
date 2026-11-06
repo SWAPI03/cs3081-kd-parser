@@ -12,6 +12,17 @@ POST /parse {"text": "set an alarm for seven thirty am tomorrow"}
 -> {"intent": "alarm_set", "date": "tomorrow", "time": "seven thirty am", "place": null}
 ```
 
+## Links
+| What | Where |
+|---|---|
+| GitHub repository | https://github.com/SWAPI03/cs3081-kd-parser |
+| Assessed commit | tag `final`: https://github.com/SWAPI03/cs3081-kd-parser/tree/final |
+| Model Release (models, tokenizer, version info, checksums) | https://github.com/SWAPI03/cs3081-kd-parser/releases/tag/models |
+| CI run, all stages passing | https://github.com/SWAPI03/cs3081-kd-parser/actions/runs/42074609367 |
+| CI run failing at the quality gate (untrained model) | https://github.com/SWAPI03/cs3081-kd-parser/actions/runs/42074783612 |
+| Report | `report/report.pdf` |
+| Handwritten reflection | `230103015.pdf` (in the submitted zip) |
+
 ## Prerequisites
 Run everything from bash (Linux, macOS, or WSL2 on Windows). Ollama can run on the host OS.
 
