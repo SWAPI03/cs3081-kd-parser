@@ -20,8 +20,6 @@ project. I read it and confirm it describes what happened.
   two Windows Firewall Block rules for `ollama.exe` stopped WSL from reaching Ollama; restarting
   the Windows NAT service cut WSL's internet until I restarted Windows.
 - Drafting `report/report.pdf` from the files in `results/`.
-- Drafting the text of my handwritten reflection from the events of this project; I copied it
-  by hand.
 - Claude triggered the deliberately failing CI run (untrained model) through the GitHub API.
 
 ## How I checked the output
