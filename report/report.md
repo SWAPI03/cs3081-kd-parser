@@ -16,7 +16,7 @@
 
 **Sharding.** Two worker Pods run as one Indexed Job in namespace `pipeline` (`k8s/pipeline/label-job.yaml`). Kubernetes gives each Pod a completion index (0 or 1), passed to the worker as `SHARD_INDEX`; `SHARD_COUNT` is 2. A worker takes the commands whose line number modulo `SHARD_COUNT` equals `SHARD_INDEX`, so the shards are disjoint, together cover every line, and are equal in size (1,500 each). The workers never coordinate: each writes its own object (`datasets/teacher/shard-0.jsonl`, `shard-1.jsonl`) and uploads it every 25 commands. A restarted Pod reads its object back and continues after the last saved id, so a crash costs at most 25 commands and creates no duplicates. Both workers call the same Ollama server, so two workers give less than twice the speed of one; the design itself scales out unchanged with more teacher servers.
 
-**Results.** The Job completed in **26 min** with **2/2** completions (`results/task1_workers.txt`), at about **65 commands/min per worker**. At about 750 of 1,500 commands per shard, Ollama on the laptop stopped answering (HTTP 500, then connection refused). The Job replaced the failed Pods, and the new Pods resumed from their checkpoints (**2 Succeeded and 3 Failed Pods** listed in `results/task1_workers.txt`). Coverage check in `clean.py`: **3,000 ids, 0 missing, 0 repeated** (`results/clean_counts.json`).
+**Results.** The Job completed in **26 min** with **2/2** completions (`results/task1_workers.txt`), at **61 to 69 commands/min per worker** in normal operation (worker logs `results/task1_teacher-label-*.log`). At about 750 of 1,500 commands per shard, Ollama on the laptop stopped answering (HTTP 500, then connection refused). The Job replaced the failed Pods, and the new Pods resumed from their checkpoints (**2 Succeeded and 3 Failed Pods** listed in `results/task1_workers.txt`). Coverage check in `clean.py`: **3,000 ids, 0 missing, 0 repeated** (`results/clean_counts.json`).
 
 | Input | (a) not JSON | (b) wrong keys | (c) bad intent | (d) slot not in command | Duplicates | Kept |
 |---|---|---|---|---|---|---|
@@ -26,7 +26,7 @@ Duplicates are removed first, so the copy kept is always the smallest id; each r
 
 ## 2. Training the student (sequence-level distillation)
 
-**Setup.** `make train` reads only `training/config.yaml`: seed 42, learning rate 2e-4, batch size 16, 5 epochs, maximum sequence length 128 (the longest example is **65** tokens, so nothing is cut), linear warm-up over 5% of steps, and the library versions. Each example is `Command: <command>\nJSON: <teacher reply><end-of-text>`. The loss covers only the reply and the end-of-text token, so the student learns where to stop; this gave **100%** valid JSON. The reply is the teacher's parsed JSON written back with a fixed key order and spacing (same content, one consistent format; the raw reply is kept unchanged in the shards and in `train.jsonl`). The first 1,500 cleaned records are used. Training is a plain PyTorch loop on the CPU with Hugging Face Transformers for model and tokenizer; v2 uses seed 7. Models: `s3://models/v1/`, `s3://models/v2/`, and the GitHub Release `models` (`model-v1.tar.gz`, sha256 `7269c59f...d2675b`, equal to `models/v1/model.sha256`).
+**Setup.** `make train` reads only `training/config.yaml`: seed 42, learning rate 2e-4, batch size 16, 5 epochs, maximum sequence length 128 (the longest example is **65** tokens according to the `make train` output, so nothing is cut), linear warm-up over 5% of steps, and the library versions. Each example is `Command: <command>\nJSON: <teacher reply><end-of-text>`. The loss covers only the reply and the end-of-text token, so the student learns where to stop; this gave **100%** valid JSON. The reply is the teacher's parsed JSON written back with a fixed key order and spacing (same content, one consistent format; the raw reply is kept unchanged in the shards and in `train.jsonl`). The first 1,500 cleaned records are used. Training is a plain PyTorch loop on the CPU with Hugging Face Transformers for model and tokenizer; v2 uses seed 7. Models: `s3://models/v1/`, `s3://models/v2/`, and the GitHub Release `models` (`model-v1.tar.gz`, sha256 `7269c59f...d2675b`, equal to `models/v1/model.sha256`).
 
 **Loss per epoch** (`training/loss.csv`, `training/loss_v2.csv`):
 
@@ -35,7 +35,7 @@ Duplicates are removed first, so the copy kept is always the smallest id; each r
 | v1 | 0.451 | 0.182 | 0.111 | 0.062 | 0.026 |
 | v2 | 0.453 | 0.197 | 0.121 | 0.059 | 0.026 |
 
-Training v2 took **879 s** on the CPU; v1 used the same recipe. Inference: **0.23 s** per command.
+Training v2 took **879 s** on the CPU (`make train-v2` output); v1 used the same recipe. Inference: **0.23 s** per command (`make eval` output).
 
 **Validation scores** (100 commands, `tools/score.py`, files `results/teacher_validation.json`, `results/score_*.json`):
 
